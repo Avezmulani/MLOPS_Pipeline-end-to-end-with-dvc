@@ -25,21 +25,21 @@ file_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
-# def load_params(params_path : str) -> dict:
-#     try:
-#         with open(params_path,'r') as file:
-#             params = yaml.safe_load(file)
-#         logger.debug('Parameters retrived from %s',params_path)
-#         return params
-#     except FileNotFoundError:
-#         logger.error('File not found %s',params_path)
-#         raise
-#     except yaml.YAMLError as e:
-#         logger.error('YAML error %s',e)
-#         raise
-#     except Exception as e:
-#         logger.error('Unexpected erroe : %s',e)
-#         raise
+def load_params(params_path:str)-> dict:
+    try:
+        with open(params_path, 'r') as file:
+            params = yaml.safe_load(file)
+            logger.debug('Params accessed successfully from %s', params_path)
+            return params
+    except FileNotFoundError:
+        logger.error('YAML file not found at %s',params_path)
+        raise
+    except yaml.YAMLError as e:
+        logger.error('Error in YAML file %s',e)
+        raise
+    except Exception as e:
+        logger.error('Unexpected Error Occured %s',e)
+        raise
 
 def load_data(file_path: str) -> pd.DataFrame:
     try:
@@ -90,9 +90,9 @@ def save_data(df: pd.DataFrame, file_path: str) -> None:
 
 def main():
     try:
-        # params = load_params(params_path='params.yaml')
-        # max_features = params['feature_engineering']['max_features']
-        max_features = 50
+        params = load_params(params_path='params.yaml')
+
+        max_features = params['feature_engineering']['max_features']
 
         train_data = load_data('./data/interim/train_processed.csv')
         test_data = load_data('./data/interim/test_processed.csv')
